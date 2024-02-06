@@ -58,6 +58,25 @@ impl Lexer {
 
     // parses a number.
     fn parser_number(&mut self) {
+        while self.look_ahead().is_ascii_digit() {
+            self.advance();
+        }
+
+        if self.look_ahead() == '.' && self.look_ahead_twice().is_ascii_digit() {
+            self.advance();
+            while self.look_ahead().is_ascii_digit() {
+                self.advance();
+            }
+        }
+
+        let number_literal = self.source_string[self.start..self.current]
+            .to_string()
+            .parse::<f64>();
+
+        match number_literal {
+            Ok(number_literal) => self.add_token(Token::Number(number_literal)),
+            Err(_) => panic!("Failed to parse number literal as f64"),
+        }
     }
 
     // consumes next character and returns it.
