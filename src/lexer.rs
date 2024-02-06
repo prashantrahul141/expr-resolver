@@ -37,6 +37,16 @@ impl Lexer {
         }
     }
 
+    // public function which starts parsing.
+    pub fn parse(&mut self) {
+        while !self.is_at_end() {
+            self.parse_token();
+            self.start = self.current;
+        }
+
+        self.add_token(Token::Eof);
+    }
+
     // parses one token at at time.
     fn parse_token(&mut self) {
         let current_char = self.advance();
