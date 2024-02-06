@@ -37,6 +37,29 @@ impl Lexer {
         }
     }
 
+    // parses one token at at time.
+    fn parse_token(&mut self) {
+        let current_char = self.advance();
+
+        match current_char {
+            '+' => self.add_token(Token::Add),
+            '-' => self.add_token(Token::Subtract),
+            '*' => self.add_token(Token::Multiply),
+            '/' => self.add_token(Token::Divide),
+            _ => {
+                if current_char.is_ascii_digit() {
+                    self.parser_number();
+                } else {
+                    panic!("unsupported character in input.");
+                }
+            }
+        }
+    }
+
+    // parses a number.
+    fn parser_number(&mut self) {
+    }
+
     // consumes next character and returns it.
     fn advance(&mut self) -> char {
         self.current += 1;
