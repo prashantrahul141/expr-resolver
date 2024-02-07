@@ -35,4 +35,24 @@ impl<'a> Parser<'a> {
         Self { lexer }
     }
 
+    fn infix_binding_power(token: Token) -> (u8, u8) {
+        match token {
+            Token::Plus => (1, 2),
+            Token::Minus => (1, 2),
+            Token::Star => (3, 4),
+            Token::Slash => (3, 4),
+
+            // basically unreachable.
+            t => panic!("Cannot get infix binding power of {t}"),
+        }
+    }
+
+    fn prefix_binding_power(token: Token) -> ((), u8) {
+        match token {
+            Token::Minus | Token::Plus => ((), 5),
+
+            // basically unreachable.
+            t => panic!("Cannot get infix binding power of {t}"),
+        }
+    }
 }
