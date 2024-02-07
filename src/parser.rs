@@ -34,48 +34,86 @@ pub struct Parser<'a> {
 }
 
 impl<'a> Parser<'a> {
+    // constructor for parser.
     pub fn new(lexer: &'a mut Lexer) -> Self {
         Self { lexer }
     }
 
+    // public parse method.
     pub fn parse(&mut self) -> AST {
+        // we start with binding power of 0.
         self.expr(0)
     }
 
+    /// Parses an expression using Operator-Precedence parse (Pratt Parsing)
+    /// ref : https://en.wikipedia.org/wiki/Operator-precedence_parser
+    /// # Arguments
+    /// * min_binding_power - minimum binding power till recursivel parse the expression.
+    /// # Returns
+    /// * AST - ast of the expression.
     fn expr(&mut self, min_binding_power: u8) -> AST {
+        // Parsing left hand side of the expression.
         let mut left_hand_side = match self.lexer.next_token() {
+            // if the token is a number we simply create a node out of it.
             Token::Number(f) => AST::Node(Token::Number(f)),
+
+            // if we reached the end we panic.
             Token::Eof => panic!("Unexpected token : EOF"),
+
+            // if its a operator, then it means the operator is a unary.
             operator => {
+                // we get the right binding power of the unary operator.
                 let ((), right_binding_power) = Parser::prefix_binding_power(operator);
+
+                // then recursively parse it.
                 let right_hand_side = self.expr(right_binding_power);
+
+                // finally return the ast.
                 AST::Con(operator, vec![right_hand_side])
             }
         };
 
         loop {
+            // Operator: Infix operator.
             let operator = match self.lexer.peek() {
+                // shouldn't be a number, obviously.
                 Token::Number(n) => panic!("Expected operator recieved number : {n}"),
+
+                // also shouldn't end.
                 Token::Eof => break,
+
+                // take the operator.
                 op => op,
             };
 
+            // get the left binding power and right binding power of this infix operator.
             let (left_bp, right_bp) = Parser::infix_binding_power(operator);
 
+            // ends recursion when the minimum binding power for this
+            // expr function call is less then left binding power of the current operator.
             if left_bp < min_binding_power {
                 break;
             }
 
+            // consume operator token.
             self.lexer.next_token();
 
+            // recurisvely call expr to parse right hand side of the expression.
             let right_hand_side = self.expr(right_bp);
 
+            // create ast.
             left_hand_side = AST::Con(operator, vec![left_hand_side, right_hand_side]);
         }
 
+        // return the created AST.
         left_hand_side
     }
 
+    /// Gets the infix binding power of a operator.
+    /// # Arguments
+    /// * token - the operator token.
+    /// # Returns
+    /// * (left, right) - left and right infix binding power of the operator.
     fn infix_binding_power(token: Token) -> (u8, u8) {
         match token {
             Token::Plus => (1, 2),
@@ -88,6 +126,11 @@ impl<'a> Parser<'a> {
         }
     }
 
+    /// Gets the prefix binding power of a unary operators.
+    /// # Arguments
+    /// * token - the operator token.
+    /// # Returns
+    /// * ((), right) - right prefix binding power of the operator.
     fn prefix_binding_power(token: Token) -> ((), u8) {
         match token {
             Token::Minus | Token::Plus => ((), 5),
