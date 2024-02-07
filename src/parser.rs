@@ -24,3 +24,15 @@ impl core::fmt::Display for AST {
     }
 }
 
+// Top level parser.
+// parses linear array of tokens into AST.
+pub struct Parser<'a> {
+    lexer: &'a mut Lexer,
+}
+
+impl<'a> Parser<'a> {
+    pub fn new(lexer: &'a mut Lexer) -> Self {
+        Self { lexer }
+    }
+
+}
