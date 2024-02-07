@@ -2,6 +2,7 @@ pub mod interpreter;
 pub mod lexer;
 pub mod parser;
 
+use interpreter::Interpreter;
 use lexer::Lexer;
 use parser::Parser;
 
@@ -28,7 +29,14 @@ pub fn resolve(input_string: String) -> Result<(), String> {
     // create a new parser
     let mut parser = Parser::new(&mut lexer);
     // and parse tokens into AST.
-    let _ = parser.parse();
+    let ast = parser.parse();
+
+    match ast {
+        Ok(ast) => {
+            let _ = Interpreter::new(ast);
+        }
+        Err(err) => return Err(err),
+    };
 
     Ok(())
 }
