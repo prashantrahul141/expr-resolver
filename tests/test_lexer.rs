@@ -46,4 +46,12 @@ mod lexer_tests {
             }
         }
     }
+
+    #[test]
+    fn error_flag() {
+        let mut lexer = Lexer::new("2(2".to_string());
+        lexer.scan();
+
+        assert!(lexer.has_errors);
+    }
 }

@@ -39,6 +39,8 @@ pub struct Lexer {
     pub tokens: Vec<Token>,
     // len of the input string.
     pub len: usize,
+    // flag for errors.
+    pub has_errors: bool,
 }
 
 impl Lexer {
@@ -57,6 +59,7 @@ impl Lexer {
             current: 0,
             len: input.len(),
             tokens: vec![],
+            has_errors: false,
         }
     }
 
@@ -85,11 +88,12 @@ impl Lexer {
             '-' => self.add_token(Token::Minus),
             '*' => self.add_token(Token::Star),
             '/' => self.add_token(Token::Slash),
+            ' ' | '\t' | '\r' => {}
             _ => {
                 if current_char.is_ascii_digit() {
                     self.scan_number();
                 } else {
-                    panic!("unsupported character in input.");
+                    self.has_errors = true;
                 }
             }
         }
