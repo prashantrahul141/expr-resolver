@@ -40,7 +40,7 @@ impl<'a> Parser<'a> {
     }
 
     // public parse method.
-    pub fn parse(&mut self) -> AST {
+    pub fn parse(&mut self) -> Result<AST, String> {
         // we start with binding power of 0.
         self.expr(0)
     }
@@ -51,14 +51,14 @@ impl<'a> Parser<'a> {
     /// * min_binding_power - minimum binding power till recursivel parse the expression.
     /// # Returns
     /// * AST - ast of the expression.
-    fn expr(&mut self, min_binding_power: u8) -> AST {
+    fn expr(&mut self, min_binding_power: u8) -> Result<AST, String> {
         // Parsing left hand side of the expression.
         let mut left_hand_side = match self.lexer.next_token() {
             // if the token is a number we simply create a node out of it.
             Token::Number(f) => AST::Node(Token::Number(f)),
 
             // if we reached the end we panic.
-            Token::Eof => panic!("Unexpected token : EOF"),
+            Token::Eof => return Err("Unexpected token : EOF".to_string()),
 
             // if its a operator, then it means the operator is a unary.
             operator => {
@@ -66,10 +66,12 @@ impl<'a> Parser<'a> {
                 let ((), right_binding_power) = Parser::prefix_binding_power(operator);
 
                 // then recursively parse it.
-                let right_hand_side = self.expr(right_binding_power);
-
-                // finally return the ast.
-                AST::Con(operator, vec![right_hand_side])
+                match self.expr(right_binding_power) {
+                    // save if its safe.
+                    Ok(right_hand_side) => AST::Con(operator, vec![right_hand_side]),
+                    // return if err.
+                    Err(err) => return Err(err),
+                }
             }
         };
 
@@ -77,7 +79,7 @@ impl<'a> Parser<'a> {
             // Operator: Infix operator.
             let operator = match self.lexer.peek() {
                 // shouldn't be a number, obviously.
-                Token::Number(n) => panic!("Expected operator recieved number : {n}"),
+                Token::Number(n) => return Err(format!("Expected operator recieved number : {n}")),
 
                 // also shouldn't end.
                 Token::Eof => break,
@@ -99,14 +101,17 @@ impl<'a> Parser<'a> {
             self.lexer.next_token();
 
             // recurisvely call expr to parse right hand side of the expression.
-            let right_hand_side = self.expr(right_bp);
-
-            // create ast.
-            left_hand_side = AST::Con(operator, vec![left_hand_side, right_hand_side]);
+            match self.expr(right_bp) {
+                Ok(right_hand_side) => {
+                    // create ast.
+                    left_hand_side = AST::Con(operator, vec![left_hand_side, right_hand_side]);
+                }
+                Err(err) => return Err(err),
+            }
         }
 
         // return the created AST.
-        left_hand_side
+        Ok(left_hand_side)
     }
 
     /// Gets the infix binding power of a operator.

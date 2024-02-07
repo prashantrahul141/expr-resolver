@@ -24,5 +24,5 @@ fn main() {
     let mut parser = Parser::new(&mut lexer);
     let m = parser.parse();
 
-    println!("{}", m);
+    println!("{}", m.unwrap());
 }
