@@ -3,11 +3,26 @@
 pub enum Token {
     // we store numbers as rust's f64.
     Number(f64),
+    // operators.
     Plus,
     Minus,
     Star,
     Slash,
+    // end of file for ease of use.
     Eof,
+}
+
+impl core::fmt::Display for Token {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self {
+            Token::Number(n) => write!(f, " {n} "),
+            Token::Plus => write!(f, " + "),
+            Token::Minus => write!(f, " - "),
+            Token::Star => write!(f, " * "),
+            Token::Slash => write!(f, " / "),
+            Token::Eof => write!(f, " EOF "),
+        }
+    }
 }
 
 // top level lexer.
@@ -129,12 +144,12 @@ impl Lexer {
     }
 
     /// returns the next token, and also consumes it.
-    fn next(&mut self) -> Token {
+    pub fn next_token(&mut self) -> Token {
         self.tokens.pop().unwrap_or(Token::Eof)
     }
 
     /// returns the next token, but doesn't consume it.
-    fn peek(&self) -> Token {
+    pub fn peek(&self) -> Token {
         self.tokens.last().copied().unwrap_or(Token::Eof)
     }
 
