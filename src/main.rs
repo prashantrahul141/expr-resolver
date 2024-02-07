@@ -1,5 +1,8 @@
-use lexer::Lexer;
 pub mod lexer;
+pub mod parser;
+
+use lexer::Lexer;
+use parser::Parser;
 
 fn main() {
     // take input string as command line argument.
@@ -13,7 +16,13 @@ fn main() {
     let mut lexer = Lexer::new(input_string);
     lexer.scan();
 
-    for token in lexer.tokens {
+    for token in &lexer.tokens {
         println!("{:?}", token);
     }
+
+    // parser.
+    let mut parser = Parser::new(&mut lexer);
+    let m = parser.parse();
+
+    println!("{}", m);
 }
