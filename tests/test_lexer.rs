@@ -1,5 +1,5 @@
 mod lexer_tests {
-    use expr_resolver::lexer::{Lexer, Token};
+    use expr_resolver::{lexer::Lexer, token::Token};
 
     #[test]
     fn basic() {
