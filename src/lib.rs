@@ -16,9 +16,10 @@ use parser::Parser;
 /// # Examples
 /// ```
 /// use expr_resolver::resolve;
+/// // gives syntax error.
 /// assert!(matches!(resolve("2)2".to_string()), Err(String)));
 /// ```
-pub fn resolve(input_string: String) -> Result<(), String> {
+pub fn resolve(input_string: String) -> Result<f64, String> {
     // create a new lexer
     let mut lexer = Lexer::new(input_string);
     // and parse input string into tokens.
@@ -33,12 +34,15 @@ pub fn resolve(input_string: String) -> Result<(), String> {
     // and parse tokens into AST.
     let ast = parser.parse();
 
+    // if the ast is correct.
     match ast {
         Ok(ast) => {
-            let _ = Interpreter::new(ast);
+            // we create a new ast walk interpreter.
+            let interpreter = Interpreter::new();
+            // walk the ast and return the resulting Result<f64, String>
+            return interpreter.walk_ast(&ast);
         }
+        // otherwise we return the error we got from the parser.
         Err(err) => return Err(err),
     };
-
-    Ok(())
 }
