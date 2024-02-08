@@ -54,9 +54,9 @@ pub fn resolve(input_string: String) -> Result<f64, String> {
     match ast {
         Ok(ast) => {
             // we walk the ast with our interpreter.
-            return Interpreter::walk_ast(&ast);
+            Interpreter::walk_ast(&ast)
         }
         // otherwise we return the error we got from the parser.
-        Err(err) => return Err(err),
-    };
+        Err(err) => Err(err),
+    }
 }

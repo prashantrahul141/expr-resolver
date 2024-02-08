@@ -13,7 +13,7 @@ impl Interpreter {
     pub fn walk_ast(ast: &AST) -> Result<f64, String> {
         match ast {
             // if the entire ast is just one token.
-            AST::Node(number) => Interpreter::walk_node(&number),
+            AST::Node(number) => Interpreter::walk_node(number),
             // walk the rest ast.
             AST::Con(operator, sub_tokens) => Interpreter::solve_expr(operator, sub_tokens),
         }
@@ -26,7 +26,7 @@ impl Interpreter {
     /// Result with value of the number inside the token, otherwise error string.
     fn walk_node(token: &Token) -> Result<f64, String> {
         match token {
-            Token::Number(f) => Ok(f.clone()),
+            Token::Number(f) => Ok(*f),
             _ => Err("Unrecognised node token.".to_string()),
         }
     }
@@ -41,11 +41,11 @@ impl Interpreter {
     fn solve_expr(operator: &Token, sub_tokens: &Vec<AST>) -> Result<f64, String> {
         match sub_tokens.len() {
             // if there are two operands, the expression is binary.
-            2 => return Interpreter::solve_binary(operator, sub_tokens),
+            2 => Interpreter::solve_binary(operator, sub_tokens),
             // if there is only one operand, the expression is unary.
-            1 => return Interpreter::solve_unary(operator, sub_tokens),
+            1 => Interpreter::solve_unary(operator, sub_tokens),
             // everything else is unreal according to this interpreter.
-            _ => return Err("Unrecognised number of operands.".to_string()),
+            _ => Err("Unrecognised number of operands.".to_string()),
         }
     }
 
@@ -55,7 +55,7 @@ impl Interpreter {
     /// * sub_tokens - Reference to vector of ast inside the current node.
     /// # Returns
     /// Result with value after solving the binary expresion, otherwise error string.
-    fn solve_binary(operator: &Token, sub_tokens: &Vec<AST>) -> Result<f64, String> {
+    fn solve_binary(operator: &Token, sub_tokens: &[AST]) -> Result<f64, String> {
         // the left operand.
         let left = match Interpreter::walk_ast(&sub_tokens[0]) {
             Ok(left) => left,
@@ -74,7 +74,7 @@ impl Interpreter {
             Token::Minus => Ok(left - right),
             Token::Star => Ok(left * right),
             Token::Slash => Ok(left / right),
-            _ => return Err("Unrecognised binary operator.".to_string()),
+            _ => Err("Unrecognised binary operator.".to_string()),
             //
         }
     }
@@ -85,7 +85,7 @@ impl Interpreter {
     /// * sub_tokens - Reference to vector of ast inside the current node.
     /// # Returns
     /// Result with value after solving the binary expresion, otherwise error string.
-    fn solve_unary(token: &Token, sub_tokens: &Vec<AST>) -> Result<f64, String> {
+    fn solve_unary(token: &Token, sub_tokens: &[AST]) -> Result<f64, String> {
         // the only right operand.
         let right = match Interpreter::walk_ast(&sub_tokens[0]) {
             Ok(right) => right,
@@ -94,8 +94,8 @@ impl Interpreter {
 
         // checking type of operator and solving accordingly.
         match token {
-            Token::Minus => return Ok(-right),
-            _ => return Err("Unrecognised binary operator.".to_string()),
+            Token::Minus => Ok(-right),
+            _ => Err("Unrecognised binary operator.".to_string()),
         }
     }
 }
