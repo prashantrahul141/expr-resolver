@@ -37,8 +37,8 @@ use parser::Parser;
 /// ```
 pub fn resolve(input_string: String) -> Result<f64, String> {
     // create a new lexer
-    let mut lexer = Lexer::new(input_string);
     // and parse input string into tokens.
+    let mut lexer = Lexer::new(input_string);
     lexer.scan();
 
     if lexer.has_errors {
@@ -53,10 +53,8 @@ pub fn resolve(input_string: String) -> Result<f64, String> {
     // if the ast is correct.
     match ast {
         Ok(ast) => {
-            // we create a new ast walk interpreter.
-            let interpreter = Interpreter::new();
-            // walk the ast and return the resulting Result<f64, String>
-            return interpreter.walk_ast(&ast);
+            // we walk the ast with our interpreter.
+            return Interpreter::walk_ast(&ast);
         }
         // otherwise we return the error we got from the parser.
         Err(err) => return Err(err),
