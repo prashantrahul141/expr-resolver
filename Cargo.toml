@@ -1,6 +1,6 @@
 [package]
 name = "expr-solver"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
 authors = ["Prashant Rahul <prashantrahul141@protonmail.com>"]
 description = "Solves a mathematical expression while following precedence and associativity."
