@@ -1,4 +1,4 @@
-use expr_resolver::resolve;
+use expr_solver::resolve;
 
 #[test]
 fn basic_resolution() {

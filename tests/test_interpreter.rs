@@ -1,4 +1,4 @@
-use expr_resolver::{ast::AST::*, interpreter::Interpreter, token::Token::*};
+use expr_solver::{ast::AST::*, interpreter::Interpreter, token::Token::*};
 
 #[test]
 fn basic_walking() {

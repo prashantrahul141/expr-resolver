@@ -1,4 +1,4 @@
-use expr_resolver::{lexer::Lexer, token::Token};
+use expr_solver::{lexer::Lexer, token::Token};
 
 #[test]
 fn basic() {

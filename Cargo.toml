@@ -1,12 +1,12 @@
 [package]
-name = "expr-resolver"
+name = "expr-solver"
 version = "0.1.0"
 edition = "2021"
 authors = ["Prashant Rahul <prashantrahul141@protonmail.com>"]
 description = "Solves a mathematical expression while following precedence and associativity."
 readme = "README.md"
-homepage = "https://github.com/prashantrahul141/expr-resolver"
-repository = "https://github.com/prashantrahul141/expr-resolver"
+homepage = "https://github.com/prashantrahul141/expr-solver"
+repository = "https://github.com/prashantrahul141/expr-solver"
 license = "MIT"
 keywords = ["expression", "parser", "lexer", "interpreter"]
 categories = ["compilers", "parser-implementations"]

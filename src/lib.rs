@@ -15,7 +15,7 @@ use parser::Parser;
 /// Result<f_64, String>
 /// # Examples
 /// ```
-/// use expr_resolver::resolve;
+/// use expr_solver::resolve;
 ///
 /// // simple binary expression.
 /// assert_eq!(resolve("2+2".to_string()), Ok(4.0));

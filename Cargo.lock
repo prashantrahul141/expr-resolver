@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "expr-resolver"
+name = "expr-solver"
 version = "0.1.0"
