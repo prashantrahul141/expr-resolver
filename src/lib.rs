@@ -18,19 +18,19 @@ use parser::Parser;
 /// use expr_resolver::resolve;
 ///
 /// // simple binary expression.
-/// assert!(resolve("2+2".to_string()) == Ok(4.0));
+/// assert_eq!(resolve("2+2".to_string()), Ok(4.0));
 ///
 /// // follows precendence, 2 + (2 * 2) and NOT (2 + 2) * 2
-/// assert!(resolve("2+2*2".to_string()) == Ok(6.0));
+/// assert_eq!(resolve("2+2*2".to_string()), Ok(6.0));
 ///
 /// // unary expression.
-/// assert!(resolve("-2".to_string()) == Ok(-2.0));
+/// assert_eq!(resolve("-2".to_string()), Ok(-2.0));
 ///
 /// // even chain them. -(-2)
-/// assert!(resolve("--2".to_string()) == Ok(2.0));
+/// assert_eq!(resolve("--2".to_string()), Ok(2.0));
 ///
 /// // binary and unary in one expression.
-/// assert!(resolve("2+-2".to_string()) == Ok(0.0));
+/// assert_eq!(resolve("2+-2".to_string()), Ok(0.0));
 ///
 /// // gives syntax error.
 /// assert!(matches!(resolve("2)2".to_string()), Err(String)));
