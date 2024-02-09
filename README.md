@@ -8,7 +8,7 @@ The crate provides one public api function.
 fn resolve(input_string: String) -> Result<f64, String>
 ```
 
-This takes mathematical expressions as String, and returns a Result enum with solved value or incase of a error, A error string.
+This takes mathematical expressions as String, and returns a Result enum with solved value or incase of an error, error string.
 
 ### Examples
 

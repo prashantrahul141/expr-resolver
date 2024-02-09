@@ -12,7 +12,7 @@ use parser::Parser;
 /// # Arguments
 /// * input_string
 /// # Returns
-/// Result<f_64, String>
+/// Result enum with solved value or incase of an error, error string.
 /// # Examples
 /// ```
 /// use expr_solver::resolve;
