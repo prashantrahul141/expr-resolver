@@ -48,6 +48,20 @@ impl<'a> Parser<'a> {
             // if we reached the end we panic.
             Token::Eof => return Err("Unexpected token : EOF".to_string()),
 
+            // if grouping, the AST can be treated as primary expression.
+            Token::LeftParen => {
+                let lhs = match self.expr(0) {
+                    Ok(lhs) => lhs,
+                    Err(e) => return Err(e),
+                };
+
+                if !matches!(self.lexer.next_token(), Token::RightParen) {
+                    return Err("Expected ')' after expression.".to_string());
+                }
+
+                lhs
+            }
+
             // if its a operator, then it means the operator is a unary.
             operator => {
                 // we get the right binding power of the unary operator.
@@ -92,25 +106,30 @@ impl<'a> Parser<'a> {
             }
 
             // get the left binding power and right binding power of this infix operator.
-            let (left_bp, right_bp) = Parser::infix_binding_power(operator);
-
-            // ends recursion when the minimum binding power for this
-            // expr function call is less then left binding power of the current operator.
-            if left_bp < min_binding_power {
-                break;
-            }
-
-            // consume operator token.
-            self.lexer.next_token();
-
-            // recurisvely call expr to parse right hand side of the expression.
-            match self.expr(right_bp) {
-                Ok(right_hand_side) => {
-                    // create ast.
-                    left_hand_side = AST::Con(operator, vec![left_hand_side, right_hand_side]);
+            if let Some((left_bp, right_bp)) = Parser::infix_binding_power(operator) {
+                // ends recursion when the minimum binding power for this
+                // expr function call is less then left binding power of the current operator.
+                if left_bp < min_binding_power {
+                    break;
                 }
-                Err(err) => return Err(err),
+
+                // consume operator token.
+                self.lexer.next_token();
+
+                // recurisvely call expr to parse right hand side of the expression.
+                match self.expr(right_bp) {
+                    Ok(right_hand_side) => {
+                        // create ast.
+                        left_hand_side = AST::Con(operator, vec![left_hand_side, right_hand_side]);
+                    }
+                    Err(err) => return Err(err),
+                }
+
+                continue;
             }
+
+            // break the loop if none of the above cases are met.
+            break;
         }
 
         // return the created AST.
@@ -122,16 +141,18 @@ impl<'a> Parser<'a> {
     /// * token - the operator token.
     /// # Returns
     /// * (left, right) - left and right infix binding power of the operator.
-    fn infix_binding_power(token: Token) -> (u8, u8) {
-        match token {
+    fn infix_binding_power(token: Token) -> Option<(u8, u8)> {
+        let power = match token {
             Token::Plus => (1, 2),
             Token::Minus => (1, 2),
             Token::Star => (3, 4),
             Token::Slash => (3, 4),
 
             // basically unreachable.
-            t => panic!("Cannot get infix binding power of {t}"),
-        }
+            _ => return None,
+        };
+
+        Some(power)
     }
 
     /// Gets the postfix binding power of a operator.
