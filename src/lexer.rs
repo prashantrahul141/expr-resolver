@@ -26,7 +26,7 @@ impl Lexer {
     ///
     /// # Returns
     /// * Lexer - new instance of lexer with prepopulated fields.
-    pub fn new(input: String) -> Self {
+    pub fn new(input: &String) -> Self {
         Self {
             source_chars: input.chars().collect(),
             source_string: input.clone(),

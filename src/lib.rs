@@ -40,7 +40,7 @@ use parser::Parser;
 pub fn resolve(input_string: String) -> Result<f64, String> {
     // create a new lexer
     // and parse input string into tokens.
-    let mut lexer = Lexer::new(input_string);
+    let mut lexer = Lexer::new(&input_string);
     lexer.scan();
 
     if lexer.has_errors {
