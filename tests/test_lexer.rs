@@ -2,7 +2,7 @@ use expr_solver::{lexer::Lexer, token::Token};
 
 #[test]
 fn basic() {
-    let mut lexer = Lexer::new("2 + 2".to_string());
+    let mut lexer = Lexer::new(&"2 + 2".to_string());
     lexer.scan();
 
     assert_eq!(lexer.len, 5);
@@ -11,7 +11,7 @@ fn basic() {
 
 #[test]
 fn basic_tokenization() {
-    let mut lexer = Lexer::new("2 ++  2".to_string());
+    let mut lexer = Lexer::new(&"2 ++  2".to_string());
     lexer.scan();
 
     assert_eq!(lexer.tokens.len(), 5);
@@ -28,7 +28,7 @@ fn basic_tokenization() {
 
 #[test]
 fn basic_number_scanning() {
-    let mut lexer = Lexer::new("1414141 141.141 141".to_string());
+    let mut lexer = Lexer::new(&"1414141 141.141 141".to_string());
     lexer.scan();
 
     match lexer.tokens[3] {
@@ -48,7 +48,7 @@ fn basic_number_scanning() {
 
 #[test]
 fn error_flag() {
-    let mut lexer = Lexer::new("2(2".to_string());
+    let mut lexer = Lexer::new(&"2(2".to_string());
     lexer.scan();
 
     assert!(lexer.has_errors);
