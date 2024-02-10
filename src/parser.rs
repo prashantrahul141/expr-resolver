@@ -1,3 +1,5 @@
+use std::vec;
+
 use crate::ast::AST;
 use crate::lexer::Lexer;
 use crate::token::Token;
@@ -63,6 +65,21 @@ impl<'a> Parser<'a> {
                 op => op,
             };
 
+            // get the left binding power of the postfix operator.
+            if let Some((left_bp, ())) = Parser::postfix_binding_power(operator) {
+                // we break the loop when precendence of the current left binding
+                // power of the postfix operator is less than minimum binding power.
+                if left_bp < min_binding_power {
+                    break;
+                }
+                self.lexer.next_token();
+
+                left_hand_side = AST::Con(operator, vec![left_hand_side]);
+
+                // we need to skip the current iteration.
+                continue;
+            }
+
             // get the left binding power and right binding power of this infix operator.
             let (left_bp, right_bp) = Parser::infix_binding_power(operator);
 
@@ -104,6 +121,22 @@ impl<'a> Parser<'a> {
             // basically unreachable.
             t => panic!("Cannot get infix binding power of {t}"),
         }
+    }
+
+    /// Gets the postfix binding power of a operator.
+    /// # Arguments
+    /// * token - the operator token.
+    /// # Returns
+    /// * (left, ())) - left postfix binding power of the operator.
+    fn postfix_binding_power(token: Token) -> Option<(u8, ())> {
+        let power = match token {
+            Token::Bang => (6, ()),
+
+            // basically unreachable.
+            _ => return None,
+        };
+
+        Some(power)
     }
 
     /// Gets the prefix binding power of a unary operators.
