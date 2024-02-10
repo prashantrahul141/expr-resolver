@@ -3,6 +3,7 @@ pub mod interpreter;
 pub mod lexer;
 pub mod parser;
 pub mod token;
+pub mod utils;
 
 use interpreter::Interpreter;
 use lexer::Lexer;
@@ -19,6 +20,7 @@ use parser::Parser;
 ///
 /// // simple binary expression.
 /// assert_eq!(resolve("2+2".to_string()), Ok(4.0));
+/// assert_eq!(resolve("3!".to_string()), Ok(6.0));
 ///
 /// // follows precendence, 2 + (2 * 2) and NOT (2 + 2) * 2
 /// assert_eq!(resolve("2+2*2".to_string()), Ok(6.0));
