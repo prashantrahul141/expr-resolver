@@ -7,7 +7,6 @@ pub mod utils;
 
 use interpreter::Interpreter;
 use lexer::Lexer;
-use log;
 use parser::Parser;
 
 /// Takes mathematical expression as string, resolves it.

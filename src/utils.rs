@@ -66,5 +66,5 @@ pub fn factorial(x: f64) -> f64 {
     }
 
     // for non integers.
-    gamma(x + 1 as f64)
+    gamma(x + 1_f64)
 }

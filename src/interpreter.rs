@@ -38,7 +38,7 @@ impl Interpreter {
     /// * sub_tokens - Reference to vector of ast inside the current node.
     /// # Returns
     /// The Result returned by the respective called function.
-    fn solve_expr(operator: &Token, sub_tokens: &Vec<AST>) -> Result<f64, String> {
+    fn solve_expr(operator: &Token, sub_tokens: &[AST]) -> Result<f64, String> {
         match sub_tokens.len() {
             // if there are two operands, the expression is binary.
             2 => Interpreter::solve_binary(operator, sub_tokens),
