@@ -8,6 +8,7 @@ pub enum Token {
     Minus,
     Star,
     Slash,
+    Bang,
     // end of file for ease of use.
     Eof,
 }
@@ -20,6 +21,7 @@ impl core::fmt::Display for Token {
             Token::Minus => write!(f, " - "),
             Token::Star => write!(f, " * "),
             Token::Slash => write!(f, " / "),
+            Token::Bang => write!(f, " ! "),
             Token::Eof => write!(f, " EOF "),
         }
     }

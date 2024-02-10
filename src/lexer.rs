@@ -63,6 +63,7 @@ impl Lexer {
             '-' => self.add_token(Token::Minus),
             '*' => self.add_token(Token::Star),
             '/' => self.add_token(Token::Slash),
+            '!' => self.add_token(Token::Bang),
             ' ' | '\t' | '\r' => {}
             _ => {
                 if current_char.is_ascii_digit() {
