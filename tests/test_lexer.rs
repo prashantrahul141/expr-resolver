@@ -48,7 +48,7 @@ fn basic_number_scanning() {
 
 #[test]
 fn error_flag() {
-    let mut lexer = Lexer::new(&"2(2".to_string());
+    let mut lexer = Lexer::new(&"2'2".to_string());
     lexer.scan();
 
     assert!(lexer.has_errors);

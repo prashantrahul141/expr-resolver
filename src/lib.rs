@@ -36,7 +36,7 @@ use parser::Parser;
 /// assert_eq!(resolve("2+-2".to_string()), Ok(0.0));
 ///
 /// // gives syntax error.
-/// assert!(matches!(resolve("2)2".to_string()), Err(String)));
+/// assert!(matches!(resolve("2&2".to_string()), Err(String)));
 /// ```
 pub fn resolve(input_string: String) -> Result<f64, String> {
     log::debug!("[expr-resolve] input_string={}", &input_string);
