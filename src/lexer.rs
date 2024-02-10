@@ -72,6 +72,8 @@ impl Lexer {
             '*' => self.add_token(Token::Star),
             '/' => self.add_token(Token::Slash),
             '!' => self.add_token(Token::Bang),
+            '(' => self.add_token(Token::LeftParen),
+            ')' => self.add_token(Token::RightParen),
             ' ' | '\t' | '\r' => {}
             _ => {
                 if current_char.is_ascii_digit() {

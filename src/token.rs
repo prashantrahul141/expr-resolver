@@ -9,6 +9,9 @@ pub enum Token {
     Star,
     Slash,
     Bang,
+    // Grouping
+    LeftParen,
+    RightParen,
     // end of file for ease of use.
     Eof,
 }
@@ -23,6 +26,8 @@ impl core::fmt::Display for Token {
             Token::Slash => write!(f, " / "),
             Token::Bang => write!(f, " ! "),
             Token::Eof => write!(f, " EOF "),
+            Token::LeftParen => write!(f, " ( "),
+            Token::RightParen => write!(f, " ) "),
         }
     }
 }
