@@ -13,13 +13,24 @@ pub struct Parser<'a> {
 impl<'a> Parser<'a> {
     // constructor for parser.
     pub fn new(lexer: &'a mut Lexer) -> Self {
+        log::debug!("[expr-solver] Creating new parser instance.");
         Self { lexer }
     }
 
     // public parse method.
     pub fn parse(&mut self) -> Result<AST, String> {
+        log::debug!("[expr-solver] starting parsing.");
         // we start with binding power of 0.
-        self.expr(0)
+        match self.expr(0) {
+            Ok(ast) => {
+                log::debug!("Parsed to ast:\n{}", ast);
+                Ok(ast)
+            }
+            Err(e) => {
+                log::debug!("Failed to parse AST.");
+                Err(e)
+            }
+        }
     }
 
     /// Parses an expression using Operator-Precedence parse (Pratt Parsing)

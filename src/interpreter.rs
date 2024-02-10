@@ -68,6 +68,7 @@ impl Interpreter {
             Err(e) => return Err(e),
         };
 
+        log::trace!("Solving binary left={left}  operator={operator} right={right}");
         // checking type of operator, and solving accordingly.
         match operator {
             Token::Plus => Ok(left + right),
@@ -85,15 +86,16 @@ impl Interpreter {
     /// * sub_tokens - Reference to vector of ast inside the current node.
     /// # Returns
     /// Result with value after solving the binary expresion, otherwise error string.
-    fn solve_unary(token: &Token, sub_tokens: &[AST]) -> Result<f64, String> {
+    fn solve_unary(operator: &Token, sub_tokens: &[AST]) -> Result<f64, String> {
         // the only right operand.
         let right = match Interpreter::walk_ast(&sub_tokens[0]) {
             Ok(right) => right,
             Err(e) => return Err(e),
         };
 
+        log::trace!("Solving binary operator={operator} right={right}");
         // checking type of operator and solving accordingly.
-        match token {
+        match operator {
             Token::Minus => Ok(-right),
             Token::Bang => Ok(factorial(right)),
             _ => Err("Unrecognised binary operator.".to_string()),

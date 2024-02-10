@@ -27,6 +27,7 @@ impl Lexer {
     /// # Returns
     /// * Lexer - new instance of lexer with prepopulated fields.
     pub fn new(input: &String) -> Self {
+        log::trace!(" [expr-solver] creating new lexer instance : {}", &input);
         Self {
             source_chars: input.chars().collect(),
             source_string: input.clone(),
@@ -40,6 +41,7 @@ impl Lexer {
 
     /// Top level public function to start tokenizing the input string.
     pub fn scan(&mut self) {
+        log::trace!("[expr-solver] starting scanning for tokens.");
         while !self.is_at_end() {
             self.scan_token();
             self.start = self.current;
@@ -47,6 +49,12 @@ impl Lexer {
 
         // we add a EOF token at the end, comes handy when parsing.
         self.add_token(Token::Eof);
+
+        log::trace!(
+            "[expr-solver] Scanned {} token. tokens={:?}",
+            self.tokens.len(),
+            &self.tokens
+        );
 
         // we reverse the entire tokens vec, because we will be
         // using pop function to retrieve one token at time, which
@@ -140,6 +148,7 @@ impl Lexer {
 
     // helper function to add tokens.
     fn add_token(&mut self, token_type: Token) {
+        log::trace!("[expr-solver] adding token={}", token_type);
         self.tokens.push(token_type);
     }
 }

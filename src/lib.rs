@@ -7,6 +7,7 @@ pub mod utils;
 
 use interpreter::Interpreter;
 use lexer::Lexer;
+use log;
 use parser::Parser;
 
 /// Takes mathematical expression as string, resolves it.
@@ -38,12 +39,18 @@ use parser::Parser;
 /// assert!(matches!(resolve("2)2".to_string()), Err(String)));
 /// ```
 pub fn resolve(input_string: String) -> Result<f64, String> {
+    log::debug!("[expr-resolve] input_string={}", &input_string);
+
     // create a new lexer
     // and parse input string into tokens.
     let mut lexer = Lexer::new(&input_string);
     lexer.scan();
 
     if lexer.has_errors {
+        log::debug!(
+            "[expr-resolve] Found lexical errors in expression : {}",
+            &input_string
+        );
         return Err("Found lexical error(s) in the expression.".to_string());
     }
 

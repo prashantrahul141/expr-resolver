@@ -58,6 +58,8 @@ fn simple_factorial(x: f64) -> f64 {
 /// # Arguments
 /// * x - the number to find factorial of.
 pub fn factorial(x: f64) -> f64 {
+    log::trace!("getting factorial of {}", x);
+
     // for integers.
     if x.fract() == 0.0 {
         return simple_factorial(x);
