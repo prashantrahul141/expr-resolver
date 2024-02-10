@@ -1,4 +1,4 @@
-use crate::{ast::AST, token::Token};
+use crate::{ast::AST, token::Token, utils::factorial};
 
 /// Tree walk interpreter.
 pub struct Interpreter;
@@ -95,6 +95,7 @@ impl Interpreter {
         // checking type of operator and solving accordingly.
         match token {
             Token::Minus => Ok(-right),
+            Token::Bang => Ok(factorial(right)),
             _ => Err("Unrecognised binary operator.".to_string()),
         }
     }
